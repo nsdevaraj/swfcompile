@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="196" 
+	height="164" 
+	title="Rows &amp; Columns" 
+	horizontalAlign="left" 
+	close="closeWindow()"
+	creationComplete="init()"
+	showCloseButton="true">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			import com.adams.swfbuilder.events.RowColumnEvent;
+			
+			private function init():void
+			{
+				p_rows.setFocus();
+			}
+			
+			private function closeWindow():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function handleOk():void
+			{
+				var evt:RowColumnEvent = new RowColumnEvent(RowColumnEvent.OK, false, false, Number(p_rows.text), Number(p_columns.text));
+				dispatchEvent(evt);
+				closeWindow();
+			}
+			
+			private function handleCancel():void
+			{
+				var evt:RowColumnEvent = new RowColumnEvent(RowColumnEvent.CANCEL);
+				dispatchEvent(evt);
+				closeWindow();
+			}
+		]]>
+	</mx:Script>
+		<mx:TextInput x="8" y="20" id="p_rows"/>
+		<mx:TextInput x="8" y="64" id="p_columns"/>
+		<mx:Button x="57" y="94" label="ok" id="ok" click="handleOk()"/>
+		<mx:Button x="105" y="94" label="cancel" id="cancel" click="handleCancel()"/>
+		<mx:Label x="7" y="3" text="Rows"/>
+		<mx:Label x="7" y="48" text="Columns"/>
+</mx:TitleWindow>

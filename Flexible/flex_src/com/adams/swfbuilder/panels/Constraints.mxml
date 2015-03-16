@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" 
+	height="100%" 
+	backgroundColor="#c0c0c0" 
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off" 
+	creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import com.adams.swfbuilder.events.ControlEditorEvent;
+			import com.adams.swfbuilder.util.PropertiesTools;
+			import com.adams.swfbuilder.events.ControlCreatorEvent;
+			import mx.core.UIComponent;
+			import com.adams.swfbuilder.ControlEditor;  
+			
+			private var checks:Array = [];
+			private var textboxes:Array = [];
+			private var types:Array = new Array("left", "right", "top", "bottom", "horizontalCenter", "verticalCenter");
+			private var ox:Number;
+			private var oy:Number;
+			private var oWidth:Number;
+			private var oHeight:Number;
+			private var loading:Boolean = false;
+			
+			private function init():void
+			{ 
+				ox = centerPanel.x //-((centerPanel.width/2)-10);
+				oy = centerPanel.y //-((centerPanel.height/2)-10);
+				oWidth = centerPanel.width;
+				oHeight = centerPanel.height;
+				
+				for(var i:int=0;i<types.length;i++)
+				{
+					textboxes.push(this["txt_" + types[i]]);
+					checks.push(this["chk_" + types[i]]);
+				}
+			}
+			
+			public function setProperties(e:ControlEditorEvent):void
+			{
+				reset(); 
+				for(var i:int=0;i<e.properties.length;i++)
+				{
+					var label:String = e.properties[i].label;
+					var value:* = e.properties[i].data;
+					var isStyle:Boolean = PropertiesTools.getInstance().isStyle(label);
+					if(isStyle)
+					{ 
+						this["chk_" + label].selected = true;
+						this["txt_" + label].text = value;
+						centerPanel.setStyle(label, value); 
+					}
+				}
+			}
+			
+			public function reset(...rest):void
+			{
+				// resets / clears the controls
+				var currentTarget:UIComponent = UIComponent(ControlEditor.getInstance().getCurrentTarget());
+				for(var i:int=0;i<textboxes.length;i++) textboxes[i].text = "";
+				for(var j:int=0;j<checks.length;j++) checks[j].selected = false;
+
+				for(var k:int=0;k<types.length;k++) 
+				{
+					centerPanel.setStyle(types[k], undefined);
+				}
+				centerPanel.setStyle("horizontalCenter", undefined);
+				centerPanel.setStyle("verticalCenter", undefined);
+				centerPanel.setStyle("left",ox);
+				centerPanel.setStyle("top",oy);
+				centerPanel.width = oWidth;
+			}
+			
+			private function checkClickHandler(e:Event):void
+			{
+				var item:String = e.target.name;
+				var currentTarget:UIComponent = UIComponent(ControlEditor.getInstance().getCurrentTarget());
+				switch(item)
+				{
+					case "chk_horizontalCenter":
+						chk_left.selected = false;
+						chk_right.selected = false;
+						txt_left.text = "";
+						txt_right.text = ""; 
+						if(chk_horizontalCenter.selected)
+						{
+							txt_horizontalCenter.text = String((currentTarget.x + (currentTarget.width/2))-(currentTarget.parent.width/2));
+							centerPanel.width = oWidth;
+							centerPanel.setStyle("horizontalCenter", 0);
+						}else
+						{
+							txt_horizontalCenter.text = "";
+							centerPanel.setStyle("horizontalCenter",undefined);
+							centerPanel.setStyle("left", ox);
+						}
+						
+					break;
+					
+					case "chk_verticalCenter":
+						chk_top.selected = false;
+						chk_bottom.selected = false;
+						txt_top.text = "";
+						txt_bottom.text = "";
+						
+						if(chk_verticalCenter.selected)
+						{
+							txt_verticalCenter.text = String((currentTarget.y + (currentTarget.height/2))-(currentTarget.parent.height/2));
+							centerPanel.height = oHeight;
+							centerPanel.setStyle("verticalCenter", 0);
+						}else
+						{
+							txt_verticalCenter.text = "";
+							centerPanel.setStyle("verticalCenter", undefined);
+							centerPanel.setStyle("top", oy);
+						}
+					break;
+					
+					case "chk_left":
+						setLeftRight();		
+					break;
+					
+					case "chk_right":
+						setLeftRight();
+					break;
+					
+					case "chk_top":
+						setTopBottom();
+					break;
+					
+					case "chk_bottom":
+						setTopBottom();
+					break;
+					
+				}
+				
+				textChangeHandler();
+			}
+			
+			private function setLeftRight():void
+			{
+				centerPanel.setStyle("horizontalCenter",undefined);
+				chk_horizontalCenter.selected = false;
+				txt_horizontalCenter.text = "";
+				var currentTarget:UIComponent = UIComponent(ControlEditor.getInstance().getCurrentTarget());
+				if(chk_left.selected)
+				{
+					txt_left.text = String(currentTarget.x);
+					txt_right.text = chk_right.selected ? String(Math.abs((currentTarget.x + currentTarget.width)-currentTarget.parent.width)) : "";
+					centerPanel.setStyle("left",ox);
+					centerPanel.width = chk_right.selected ? (oWidth*2)-20 : oWidth;
+				}else if(chk_right.selected && !chk_left.selected)
+				{
+					txt_left.text = "";
+					txt_right.text = String(Math.abs((currentTarget.x + currentTarget.width)-currentTarget.parent.width));
+					centerPanel.width = oWidth;
+					centerPanel.setStyle("left", (centerPanel.parent.width-10)-oWidth);
+				}else if(!chk_left.selected && !chk_right.selected)
+				{
+					txt_left.text = "";
+					txt_right.text = "";
+					centerPanel.setStyle("left",ox);
+					centerPanel.width = oWidth;
+				}
+			}
+			
+			private function setTopBottom():void
+			{
+				centerPanel.setStyle("verticalCenter",undefined);
+				chk_verticalCenter.selected = false;
+				txt_verticalCenter.text = "";
+				var currentTarget:UIComponent = UIComponent(ControlEditor.getInstance().getCurrentTarget());
+				if(chk_top.selected)
+				{
+					txt_top.text = String(currentTarget.y);
+					txt_bottom.text = chk_bottom.selected ? String(Math.abs((currentTarget.y + currentTarget.height)-currentTarget.parent.height)) : "";
+					centerPanel.setStyle("top",ox);
+					centerPanel.height = chk_bottom.selected ? (oHeight*2)-20 : oHeight;
+				}else if(!chk_top.selected && chk_bottom.selected)
+				{
+					txt_top.text = "";
+					txt_bottom.text = String(Math.abs((currentTarget.y + currentTarget.height)-currentTarget.parent.height));
+					centerPanel.height = oHeight;
+					centerPanel.setStyle("top", (centerPanel.parent.height-10)-oHeight);
+				}else if(!chk_top.selected && !chk_bottom.selected)
+				{
+					txt_top.text = "";
+					txt_bottom.text = "";
+					centerPanel.setStyle("top",oy);
+					centerPanel.height = oHeight;
+				}
+			}
+			
+			private function textChangeHandler():void
+			{
+				// just update all properties 
+				for(var i:int=0;i<types.length;i++)
+				{
+					var value:String = this["txt_" + types[i]].text;
+					ControlEditor.getInstance().handleConstraintsChange(types[i], value);
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas width="200" height="200" verticalCenter="0" horizontalCenter="0" horizontalScrollPolicy="off"
+	verticalScrollPolicy="off" >
+		<mx:Canvas top="30" left="30" bottom="30" right="30" backgroundColor="#808080">
+			<mx:Panel x="10" y="10" width="70" height="70" layout="absolute" id="centerPanel">
+			</mx:Panel>
+		</mx:Canvas>
+		<mx:TextInput change="textChangeHandler()" x="40" y="171" width="32" id="txt_left"/>
+		<mx:TextInput change="textChangeHandler()" x="89" y="171" width="32" id="txt_horizontalCenter"/>
+		<mx:TextInput change="textChangeHandler()" x="137" y="171" width="32" id="txt_right"/>
+		<mx:TextInput change="textChangeHandler()" x="170" y="145" width="32" id="txt_bottom"/>
+		<mx:TextInput change="textChangeHandler()" x="170" y="92" width="32" id="txt_verticalCenter"/>
+		<mx:TextInput change="textChangeHandler()" x="170" y="40" width="32" id="txt_top"/>
+		
+		<mx:CheckBox click="checkClickHandler(event)" x="14" y="147" id="chk_bottom"/>
+		<mx:CheckBox click="checkClickHandler(event)" x="14" y="91" id="chk_verticalCenter"/>
+		<mx:CheckBox click="checkClickHandler(event)" x="14" y="36" id="chk_top"/>
+		<mx:CheckBox click="checkClickHandler(event)" x="44" y="10" id="chk_left"/>
+		<mx:CheckBox click="checkClickHandler(event)" x="96" y="10" id="chk_horizontalCenter"/>
+		<mx:CheckBox click="checkClickHandler(event)" x="152" y="10" id="chk_right"/>
+	</mx:Canvas>
+</mx:Canvas>

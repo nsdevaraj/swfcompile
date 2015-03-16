@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" >
+	<mx:Panel id="Panel_5751" width="400" height="200" x="92" y="67" title="New Panel" >
+		<mx:Button id="Button_9476" width="65" height="22" x="0" y="0" label="Button" >
+		</mx:Button>
+		<mx:CheckBox id="CheckBox_10933" width="26" height="18" x="0" y="28" label="CheckBox" >
+		</mx:CheckBox>
+	</mx:Panel>
+</mx:Application>

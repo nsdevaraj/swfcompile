@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" backgroundColor="#323232" remove="revertMenus()"
+	scriptTimeLimit="5" 
+	showStatusBar = "false" 
+	applicationComplete="initApp()" xmlns:ns2="com.adams.swfbuilder.panels.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.IndexChangedEvent;
+			import com.adams.swfbuilder.events.ControlEditorEvent;
+			import mx.events.ItemClickEvent;
+			import mx.validators.ValidationResult;
+			import mx.collections.ArrayCollection;
+			import com.adams.swfbuilder.events.ControlCreatorEvent;
+			import mx.events.MenuEvent;
+			import com.adams.swfbuilder.managers.StageManager;
+			import com.adams.swfbuilder.util.MXMLTools;
+			import com.adams.swfbuilder.util.PropertiesTools;
+			import mx.events.DragEvent;
+			import mx.core.UIComponent;
+			import mx.managers.DragManager;
+			import mx.core.DragSource; 
+			import com.adams.swfbuilder.ControlCreator;
+			import com.adams.swfbuilder.ControlEditor;
+			import flash.utils.*;
+			import flash.events.KeyboardEvent;
+			
+			[Embed(source="images/icons/Folder.png")]
+	        public var iconFolder:Class;
+		
+			[Embed(source="images/icons/Button.png")]
+	        public var iconButton:Class;
+	        
+	        [Embed(source="images/icons/CheckBox.png")]
+	        public var iconCheckBox:Class;
+	        
+	        [Embed(source="images/icons/ColorPicker.png")]
+	        public var iconColorPicker:Class;
+	        
+	        [Embed(source="images/icons/ComboBox.jpg")]
+	        public var iconComboBox:Class;
+	        
+	        [Embed(source="images/icons/DataGrid.jpg")]
+	        public var iconDataGrid:Class;
+	        
+	        [Embed(source="images/icons/DateChooser.jpg")]
+	        public var iconDateChooser:Class;
+	        
+	        [Embed(source="images/icons/DateField.png")]
+	        public var iconDateField:Class;
+	        
+	        [Embed(source="images/icons/HorizontalList.png")]
+	        public var iconHorizontalList:Class;
+	        
+	        [Embed(source="images/icons/HSlider.png")]
+	        public var iconHSlider:Class;
+	        
+	        [Embed(source="images/icons/Image.png")]
+	        public var iconImage:Class;
+	        
+	        [Embed(source="images/icons/Label.jpg")]
+	        public var iconLabel:Class;
+	        
+	        [Embed(source="images/icons/LinkButton.png")]
+	        public var iconLinkButton:Class;
+	        
+	        [Embed(source="images/icons/List.jpg")]
+	        public var iconList:Class;
+	        
+	        [Embed(source="images/icons/NumericStepper.jpg")]
+	        public var iconNumericStepper:Class;
+	        
+	        [Embed(source="images/icons/PopUpButton.png")]
+	        public var iconPopUpButton:Class;
+	        
+	        [Embed(source="images/icons/PopUpMenuButton.png")]
+	        public var iconPopUpMenuButton:Class;
+	        
+	        [Embed(source="images/icons/ProgressBar.jpg")]
+	        public var iconProgressBar:Class;
+	        
+	        [Embed(source="images/icons/RadioButton.png")]
+	        public var iconRadioButton:Class;
+	        
+	        [Embed(source="images/icons/RadioButtonGroup.png")]
+	        public var iconRadioButtonGroup:Class;
+	        
+	        [Embed(source="images/icons/RichTextEditor.png")]
+	        public var iconRichTextEditor:Class;
+	        
+	        [Embed(source="images/icons/SWFLoader.jpg")]
+	        public var iconSWFLoader:Class;
+	        
+	        [Embed(source="images/icons/Text.png")]
+	        public var iconText:Class;
+	        
+	        [Embed(source="images/icons/TextArea.png")]
+	        public var iconTextArea:Class;
+	        
+	        [Embed(source="images/icons/TextInput.jpg")]
+	        public var iconTextInput:Class;
+	        
+	        [Embed(source="images/icons/TileList.png")]
+	        public var iconTileList:Class;
+	        
+	        [Embed(source="images/icons/Tree.jpg")]
+	        public var iconTree:Class;
+	        
+	        [Embed(source="images/icons/VideoDisplay.png")]
+	        public var iconVideoDisplay:Class;
+	        
+	        [Embed(source="images/icons/VSlider.png")]
+	        public var iconVSlider:Class;
+	        
+	        [Embed(source="images/icons/ApplicationControlBar.jpg")]
+	        public var iconApplicationControlBar:Class;
+	        
+	        [Embed(source="images/icons/Canvas.jpg")]
+	        public var iconCanvas:Class;
+	        
+	        [Embed(source="images/icons/ControlBar.jpg")]
+	        public var iconControlBar:Class;
+	        
+	        [Embed(source="images/icons/Form.jpg")]
+	        public var iconForm:Class;
+	        
+	        [Embed(source="images/icons/FormHeading.jpg")]
+	        public var iconFormHeading:Class;
+	        
+	        [Embed(source="images/icons/Grid.jpg")]
+	        public var iconGrid:Class;
+	        
+	        [Embed(source="images/icons/HBox.jpg")]
+	        public var iconHBox:Class;
+	        
+	        [Embed(source="images/icons/HDividedBox.jpg")]
+	        public var iconHDividedBox:Class;
+	        
+	        [Embed(source="images/icons/HRule.jpg")]
+	        public var iconHRule:Class;
+	        
+	        [Embed(source="images/icons/Panel.jpg")]
+	        public var iconPanel:Class;
+	        
+	        [Embed(source="images/icons/Spacer.jpg")]
+	        public var iconSpacer:Class;
+	        
+	        [Embed(source="images/icons/Tile.jpg")]
+	        public var iconTile:Class;
+	        
+	        [Embed(source="images/icons/TitleWindow.jpg")]
+	        public var iconTitleWindow:Class;
+	        
+	        [Embed(source="images/icons/VBox.jpg")]
+	        public var iconVBox:Class;
+	        
+	        [Embed(source="images/icons/VDividedBox.jpg")]
+	        public var iconVDividedBox:Class;
+	        
+	        [Embed(source="images/icons/VRule.jpg")]
+	        public var iconVRule:Class;
+	        
+	        [Embed(source="images/icons/Accordion.jpg")]
+	        public var iconAccordion:Class;
+	        
+	        [Embed(source="images/icons/ButtonBar.jpg")]
+	        public var iconButtonBar:Class;
+	        
+	        [Embed(source="images/icons/LinkBar.jpg")]
+	        public var iconLinkBar:Class;
+	        
+	        [Embed(source="images/icons/MenuBar.jpg")]
+	        public var iconMenuBar:Class;
+	        
+	        [Embed(source="images/icons/TabBar.jpg")]
+	        public var iconTabBar:Class;
+	        
+	        [Embed(source="images/icons/TabNavigator.jpg")]
+	        public var iconTabNavigator:Class;
+	        
+	        [Embed(source="images/icons/ToggleButtonBar.jpg")]
+	        public var iconToggleButtonBar:Class;
+	        
+	        [Embed(source="images/icons/ViewStack.jpg")]
+	        public var iconViewStack:Class;
+	        
+	        [Embed(source="images/icons/Code.jpg")]
+	        public var iconCode:Class;
+	        
+	        [Embed(source="images/icons/Design.jpg")]
+	        public var iconDesign:Class; 
+			
+			private var cc:ControlCreator;
+			private var ce:ControlEditor;
+			private var ctrlDown:Boolean = false;
+			
+			[Bindable]
+			private var currentProperties:ArrayCollection;
+			
+			[Bindable]
+			private var mainMenuXML:XML;
+			
+			public function initApp():void
+			{	 
+				//XrayLogger.getInstance().registerStage(stage);
+				init();
+				cc = ControlCreator.getInstance();
+				ce = ControlEditor.getInstance();
+				ce.registerMainStage(mainStage);
+				ce.registerStage(stage);
+				ce.addEventListener(ControlCreatorEvent.PROPERTIESCHANGE, handlePropertiesChange);
+				ce.addEventListener(ControlEditorEvent.CHANGETARGET, constraintPanel.setProperties);
+				//ce.addEventListener(ControlEditorEvent.CHANGETARGET, constraintPanel.reset);
+				MXMLTools.getInstance().registerMainStage(mainStage);
+				PropertiesTools.getInstance().loadProperties();
+				
+				mainStage.addEventListener("dragEnter", handleDragEnter);
+				mainStage.addEventListener("dragDrop", handleDragDrop);
+				mainStage.addEventListener("mouseDown", handleMouseDown);
+				mainStage.addEventListener("mouseUp", handleMouseUp);
+				
+				mainStage.stage.addEventListener( KeyboardEvent.KEY_UP, keyUpEventHandler, false, 10, true ); //
+				mainStage.stage.addEventListener( KeyboardEvent.KEY_DOWN, keyDownEventHandler, false, 10, true ); //
+				
+				middleButtonBar.selectedIndex = 1; // set to design
+				codeEditor.visible = false;
+	        	mainStage.visible = true;
+				
+				 
+			} 
+			private function keyDownEventHandler(e:KeyboardEvent):void
+			{
+				ctrlDown = e.ctrlKey;
+			}
+			
+			private function keyUpEventHandler(e:KeyboardEvent):void
+			{
+				ctrlDown = e.ctrlKey;
+			}		
+			
+			private function handlePropertiesChange(e:ControlCreatorEvent):void
+			{
+				try
+				{
+					//log.debug("handlePropertiesChange", e.properties);
+					currentProperties = e.properties;
+				}catch(e:Error)
+				{
+					//log.error("handlePropertiesChange e.properties was null");
+				}finally
+				{
+					
+				}
+				
+			}
+			 // Preserve the original menus for the purposes of this demo (MacOS)
+            private var oldMenu:NativeMenu = NativeApplication.nativeApplication.menu;
+            private var newWindow:NativeWindow;
+            private function init():void
+            {
+                //For Windows
+                if (NativeWindow.supportsMenu)
+                {   
+                    stage.nativeWindow.menu = createMenu();
+                    stage.nativeWindow.maximize()                     
+                }
+                
+                // On MacOS, replace the current app menu with our new menu
+                if (NativeApplication.supportsMenu)
+                {
+                    // In 
+                    NativeApplication.nativeApplication.menu = createMenu();
+                }
+            }
+        
+            private function createMenu():NativeMenu
+            {
+                var menu:NativeMenu = new NativeMenu();
+                var menuItem1:NativeMenuItem = new NativeMenuItem("File");
+                menuItem1.submenu = createTakeoffMenu();
+                menuItem1.addEventListener(Event.SELECT, selectHandler);
+                menu.addItem(menuItem1);
+                
+                var menuItem2:NativeMenuItem = new NativeMenuItem("Edit");
+                menuItem2.submenu = createLandingMenu();
+                menuItem2.addEventListener(Event.SELECT, selectHandler);
+                menu.addItem(menuItem2);
+                return menu;
+            }
+            
+            private function createTakeoffMenu():NativeMenu
+            {
+                var menu:NativeMenu = new NativeMenu();
+                var takeoffItem1:NativeMenuItem = new NativeMenuItem("Open");
+                takeoffItem1.addEventListener(Event.SELECT, selectHandler);
+                menu.addItem(takeoffItem1);
+                var takeoffItem2:NativeMenuItem = new NativeMenuItem("Save");
+                takeoffItem2.addEventListener(Event.SELECT, selectHandler);
+                menu.addItem(takeoffItem2);
+                var takeoffItem3:NativeMenuItem = new NativeMenuItem("Exit");
+                takeoffItem3.addEventListener(Event.SELECT, selectHandler);
+                menu.addItem(takeoffItem3);
+                return menu;
+            }
+            
+            private function createLandingMenu():NativeMenu
+            {
+                var menu:NativeMenu = new NativeMenu();
+                var landingItem1:NativeMenuItem = new NativeMenuItem("Delete");
+                landingItem1.addEventListener(Event.SELECT, selectHandler);
+                menu.addItem(landingItem1);
+                 
+                return menu;
+            }
+             
+            // Cleanup when we leave
+            private function revertMenus():void {
+                if (NativeApplication.supportsMenu) {
+                    NativeApplication.nativeApplication.menu = oldMenu;
+                }
+                if (NativeWindow.supportsMenu) {
+                    newWindow.close();
+                }
+            }
+            private function selectHandler(event:Event):void 
+            {
+				var label:String = event.target.label;
+				switch(label)
+				{
+					case "Open":
+						MXMLTools.getInstance().loadMXML();
+					break;					
+					case "Save":
+						var f:File = File.desktopDirectory;
+		            	f.browseForSave("Save As");
+		            	f.addEventListener(Event.SELECT, function (event:Event):void {
+			                var stream:FileStream = new FileStream();
+			                stream.open((event.target as File),FileMode.WRITE);
+			                stream.writeUTFBytes(MXMLTools.getInstance().exportMXML(mainStage));
+			                stream.close();
+		            	})
+					break;					
+					case "Exit":
+						stage.nativeWindow.close();
+					break;					
+					case "Delete":
+						ce.removeCurrentTarget();
+					break; 
+				}
+			}						
+			private function handleMouseDown(e:MouseEvent):void
+			{
+				//if(e.target == mainStage || validateClickedObject(e.target)) return;
+				ce.setCurrentProperties();
+				ce.setCurrentTarget(mainStage);
+				mainStage.invalidateDisplayList();
+				if(e.target == mainStage) return;
+				
+				//this takes a look at whats being clicked on.  we need to switch to this method and dispatch a
+				// call to the CE instead of prototyping mouseDown events to the objects
+				var pt:Point = new Point(mainStage.mouseX, mainStage.mouseY);
+				var list:Array = mainStage.getObjectsUnderPoint(pt);
+				
+				if(list.length>0) //log.debug("list", list);
+				
+				var target:UIComponent;
+				try
+				{
+					var objType:String = getQualifiedClassName(e.target);
+					//log.debug("e.target", objType);
+					if(!PropertiesTools.getInstance().verifyValidObject(UIComponent(e.target)))
+					{
+						target = resolveParent(e.target.toString());
+					}else
+					{
+						target = UIComponent(e.target)
+					}
+					
+					
+				}catch(err:Error)
+				{
+					target = resolveParent(list[list.length-1]);
+				}
+				
+				if(target != null && target != mainStage) ce.handleDrag(e,target);
+			}
+			
+			private function validateClickedObject(obj:*):Boolean
+			{
+				var checkUIComponent:Boolean = false;
+				try
+				{
+					checkUIComponent = obj.name.indexOf("UIComponent") > -1 ? true : false;
+				}catch(e:Error)
+				{
+					
+				}finally
+				{
+					return checkUIComponent;
+				}
+			}
+			
+			private function resolveParent(list:String):UIComponent
+			{
+				var target:UIComponent;
+				try
+				{
+					// sample: MXMLBuilder0.HDividedBox11.mainStage.Label_11396.UITextField527
+					var ary:Array = list.toString().split(".");
+					// remove MXMLBuilder0.HDividedBox11.mainStage
+					ary.splice(0,4);
+					
+					//log.debug("ary", ary);
+					
+					
+					do
+					{
+						var testTarget:Object = mainStage;
+						for(var j:int=0;j<ary.length;j++)
+						{
+							//log.debug("looping", ary[j]);
+							try
+							{
+								testTarget = testTarget.getChildByName(String(ary[j]));
+							}catch(err:Error)
+							{
+								ary.pop();
+								continue;
+							}
+						}
+						try
+						{
+							//var objType:String = getQualifiedClassName(testTarget);
+							//log.debug("objType", testTarget.toString());
+							
+							if(!PropertiesTools.getInstance().verifyValidObject(testTarget))
+							{
+								ary.pop();
+								continue;
+							}
+							target = UIComponent(testTarget);
+							break;
+						}catch(e:Error)
+						{
+							
+							ary.pop();
+							//log.error("can't create UIComponent", ary.length);
+						}
+					}while(target == null)
+				}catch(mainErr:Error)
+				{
+					//log.error("unable to resolveParent with list");
+				}finally
+				{
+					return target;
+				}
+				
+			}
+			
+			private function handleMouseUp(e:MouseEvent):void
+			{
+				ce.handleDrop(e);
+			}
+			
+			private function handleDragDrop(e:DragEvent):void
+			{
+				//log.debug("handleDragDrop", ctrlDown);
+				var target:UIComponent = UIComponent(e.dragInitiator);
+				/*if(ctrlDown)
+				{
+					//reset to the parent of the copied object before asking for the new version
+					ce.setCurrentTarget(UIComponent(target.parent));
+					StageManager.getInstance().copyAsset(target);
+				}else
+				{*/
+					StageManager.getInstance().moveAsset(target, mainStage);
+				//}
+			}
+			
+			private function handleDragEnter(e:DragEvent):void
+			{
+				//log.debug(e.dragInitiator.name, ce.getCurrentTarget().name);
+				DragManager.acceptDragDrop(UIComponent(e.currentTarget));
+				DragManager.showFeedback(DragManager.MOVE);
+			}
+			
+			public function updateIcon(item:XML):Class
+	        {
+	        	var objectType:String = item.attribute("label");
+	        	//log = new XrayLog();
+	        	//log.debug("updateIcon", objectType);
+	        	var icon:Class;
+	        	
+	        	try
+	        	{
+	        		icon = this["icon" + objectType];
+	        	}
+	        	catch(e:Error)
+	        	{
+	        		icon = iconFolder
+	        	}
+	        	finally
+	        	{
+	        		return icon;
+	        	}	        		        	
+	        }
+	         
+	        private function codeDesignClickHandler(e:ItemClickEvent):void
+	        {
+	        	switch(e.label)
+	        	{
+	        		case "Source":
+	        			if(codeEditor.visible) return;
+	        			codeEditor.text = MXMLTools.getInstance().exportMXML(mainStage);
+	        			codeEditor.visible = true;
+	        			mainStage.visible = false;
+	        		break;
+	        		
+	        		case "Design":
+	        			if(mainStage.visible) return;
+	        			mainStage.removeAllChildren();
+	        			var xmlDoc:XML = XML(codeEditor.text);
+	        			xmlDoc.ignoreWhitespace = true;
+	        			
+	        			//log.debug("source", xmlDoc.toString());
+
+			            // set to the children of application
+			            var app:XMLList = xmlDoc.children();
+			            MXMLTools.getInstance().buildApp(app);
+	        			codeEditor.visible = false;
+	        			mainStage.visible = true;
+	        		break;
+	        	}
+	        }
+		]]>
+	</mx:Script>
+	
+	
+	<mx:XML id="treeData">
+		<root>
+	        <node label="Components">
+	            <node label="Button"/>
+	            <node label="CheckBox"/>
+	            <node label="ColorPicker"/>
+	            <node label="ComboBox"/>
+	            <node label="DataGrid"/>
+	            <node label="DateChooser"/>
+	            <node label="DateField"/>
+	            <node label="HSlider"/>
+	            <node label="HorizontalList"/>
+	            <node label="Image"/>
+	            <node label="Label"/>
+	            <node label="LinkButton"/>
+	            <node label="List"/>
+	            <node label="NumericStepper"/>
+	            <node label="PopUpButton"/>
+	            <node label="PopUpMenuButton"/>
+	            <node label="ProgressBar"/>
+	            <node label="RadioButton"/>
+	            <node label="RadioButtonGroup"/>
+	            <node label="RichTextEditor"/>
+	            <node label="SWFLoader"/>
+	            <node label="Text"/>
+	            <node label="TextArea"/>
+	            <node label="TextInput"/>
+	            <node label="TileList"/>
+	            <node label="Tree"/>
+	            <node label="VSlider"/>
+	            <node label="VideoDisplay"/>
+	        </node>
+	        <node label="Layout">
+	            <node label="ApplicationControlBar"/>
+	            <node label="Canvas"/>
+	            <node label="ControlBar"/>
+	            <node label="Form"/>
+	            <node label="FormHeading"/>
+	            <node label="Grid"/>
+	            <node label="HBox"/>
+	            <node label="HDividedBox"/>
+	            <node label="HRule"/>
+	            <node label="Panel"/>
+	            <node label="Spacer"/>
+	            <node label="Tile"/>
+	            <node label="TitleWindow"/>
+	            <node label="VBox"/>
+	            <node label="VDividedBox"/>
+	            <node label="VRule"/>
+	        </node>
+	        <node label="Navigators">
+	            <node label="Accordion"/>
+	            <node label="ButtonBar"/>
+	            <node label="LinkBar"/>
+	            <node label="MenuBar"/>
+	            <node label="TabBar"/>
+	            <node label="TabNavigator"/>
+	            <node label="ToggleButtonBar"/>
+	            <node label="ViewStack"/>
+	        </node>
+	    </root>
+    </mx:XML>
+    
+	<mx:ApplicationControlBar id="appBar" y="10" right="0" left="0" height="32" dock="true">
+		<mx:Canvas width="100%" height="26">
+			<mx:Label text="Flexible" fontFamily="Arial" fontWeight="bold" fontSize="14" color="#ffffff" y="-2" right="0"/>
+
+			<mx:ToggleButtonBar x="0" y="0" id="middleButtonBar" itemClick="codeDesignClickHandler(event)">
+				<mx:Array>
+	                <mx:Object label="Source" icon="@Embed(source='images/icons/Code.jpg')"/>
+	                <mx:Object label="Design" icon="@Embed(source='images/icons/Design.jpg')"/>
+	            </mx:Array>
+			</mx:ToggleButtonBar>
+		</mx:Canvas>
+	</mx:ApplicationControlBar>
+	
+	<mx:HDividedBox right="0" left="0" bottom="0" top="5" horizontalAlign="center" verticalAlign="top">
+		<mx:Canvas width="200" height="100%">  	
+			<mx:Panel width="100%" height="98%" layout="absolute" id="leftPanel" title="Components">
+				<mx:Tree id="componentsList" width="100%" height="100%" backgroundAlpha="0.0"
+						 right="0" 
+						 left="0" 
+						 bottom="0" 
+						 top="0" borderThickness="0"
+						 labelField="@label"
+						 change="cc.createObjectHandler(event)"
+						 dataProvider="{treeData}"
+						 iconFunction="updateIcon"
+						 showRoot="false">				
+				</mx:Tree>	
+			</mx:Panel>
+		</mx:Canvas>
+		<mx:Canvas x="0" y="35" width="100%" height="100%" id="middleContainer">
+			<mx:Canvas width="100%" height="100%" id="codeView" borderStyle="solid" borderColor="#000000" backgroundColor="#808080" backgroundAlpha="1.0">
+				<mx:TextArea width="100%" height="100%" id="codeEditor" fontFamily="Courier New" fontSize="12" backgroundColor="#ffffff">
+				</mx:TextArea>
+			</mx:Canvas>
+			<mx:Canvas width="100%" height="100%" id="mainStage" borderStyle="solid" borderColor="#000000" backgroundColor="#808080" backgroundAlpha="1.0">
+			</mx:Canvas>
+		</mx:Canvas>
+		<mx:Panel width="220" height="98%" layout="absolute" id="rightPanel" title="Properties">
+			<mx:VDividedBox width="100%" height="100%">
+				<mx:DataGrid x="0" y="0" width="100%" height="100%" editable="true" fontSize="9" 
+					itemEditEnd="ce.handlePropertiesChange(event)"  
+					itemFocusOut="ce.handlePropertiesChange(event)"
+					dataProvider="{currentProperties}">
+					<mx:columns>
+						<mx:DataGridColumn editable="false" headerText="Property" dataField="label"/>
+						<mx:DataGridColumn editorUsesEnterKey="false" headerText="Value" dataField="data"/>
+					</mx:columns>
+				</mx:DataGrid>
+				<ns2:Constraints id="constraintPanel" height="200" width="200">
+				</ns2:Constraints> 
+			</mx:VDividedBox>
+		</mx:Panel>
+	</mx:HDividedBox> 
+</mx:WindowedApplication>

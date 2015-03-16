@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <node label="Components">
+        <node label="Button"/>
+        <node label="CheckBox"/>
+        <node label="ColorPicker"/>
+        <node label="ComboBox"/>
+        <node label="DataGrid"/>
+        <node label="DateChooser"/>
+        <node label="DateField"/>
+        <node label="HSlider"/>
+        <node label="HorizontalList"/>
+        <node label="Image"/>
+        <node label="Label"/>
+        <node label="LinkButton"/>
+        <node label="List"/>
+        <node label="NumericStepper"/>
+        <node label="PopUpButton"/>
+        <node label="PopUpMenuButton"/>
+        <node label="ProgressBar"/>
+        <node label="RadioButton"/>
+        <node label="RadioButtonGroup"/>
+        <node label="RichTextEditor"/>
+        <node label="SWFLoader"/>
+        <node label="Text"/>
+        <node label="TextArea"/>
+        <node label="TextInput"/>
+        <node label="TileList"/>
+        <node label="Tree"/>
+        <node label="VSlider"/>
+        <node label="VideoDisplay"/>
+    </node>
+    <node label="Layout">
+        <node label="ApplicationControlBar"/>
+        <node label="Canvas"/>
+        <node label="ControlBar"/>
+        <node label="Form"/>
+        <node label="FormHeading"/>
+        <node label="Grid"/>
+        <node label="HBox"/>
+        <node label="HDividedBox"/>
+        <node label="HRule"/>
+        <node label="Panel"/>
+        <node label="Spacer"/>
+        <node label="Tile"/>
+        <node label="TitleWindow"/>
+        <node label="VBox"/>
+        <node label="VDividedBox"/>
+        <node label="VRule"/>
+    </node>
+    <node label="Navigators">
+        <node label="Accordion"/>
+        <node label="ButtonBar"/>
+        <node label="LinkBar"/>
+        <node label="MenuBar"/>
+        <node label="TabBar"/>
+        <node label="TabNavigator"/>
+        <node label="ToggleButtonBar"/>
+        <node label="ViewStack"/>
+    </node>
+</root>

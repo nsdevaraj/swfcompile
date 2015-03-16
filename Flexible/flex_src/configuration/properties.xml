@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<properties>
+	<base>
+		<prop name="id" type="String" />
+		<prop name="width" type="String" />
+		<prop name="height" type="String" />
+		<prop name="x" type="String" />
+		<prop name="y" type="String" />
+		<prop name="scaleX" type="String" />
+		<prop name="scaleY" type="String" />
+		<prop name="percentWidth" type="String" />
+		<prop name="percentHeight" type="String" />
+	</base>
+	<styles>
+		<prop name="left" />
+		<prop name="top" />
+		<prop name="right" />
+		<prop name="bottom" />
+		<prop name="horizontalCenter" />
+		<prop name="verticalCenter" />
+	</styles>
+	<controls>
+		<base>
+			<prop name="enabled" type="Boolean" value="true" />
+		</base>
+		<Button label="Button" width="65" />
+		<CheckBox width="100" label="CheckBox" />
+		<ColorPicker />
+		<ComboBox />
+		<DataGrid />
+		<DataChooser />
+		<DateField selectedDate=""/>
+		<HSlider/>
+		<HorizontalList/>
+		<Image />
+		<Label text="New Label"/>
+		<LinkButton label="LinkButton"/>
+		<List />
+		<NumericStepper />
+		<PopUpButton  label="PopUpButton" />
+		<PopUpMenuButton  label="PopUpMenuButton" />
+		<ProgressBar label="Loading %" />
+		<RadioButton label="RadioButton" />
+		<RadioButtonGroup label="RadioButtonGroup"/>
+		<RichTextEditor text="" />
+		<SWFLoader source="" />
+		<Text text="" />
+		<TextArea text="" />
+		<TextInput text="" />
+		<TileList />
+		<Tree />
+		<VSlider />
+		<VideoDisplay source="" />		
+	</controls>
+	<containers>
+		<ApplicationControlBar dock="" />
+		<Canvas label="Canvas" />
+		<ControlBar />
+		<Form label="Form" />
+		<FormHeading label="Heading" />
+		<Grid label="Grid" rows="3" cols="3" />
+		<HBox label="HBox" />
+		<HDividedBox label="HDividedBox" />
+		<HRule />
+		<Panel width="200" height="200" title="New Panel" />
+		<Spacer />
+		<Tile label="" />
+		<TitleWindow title="New Title Window" />
+		<VBox label="" />
+		<VDividedBox label="" />
+		<VRule />
+		<Accordion />
+		<ButtonBar />
+		<LinkBar />
+		<MenuBar />
+		<TabBar />
+		<TabNavigator />
+		<ToggleButtonBar />
+		<ViewStack />
+	</containers>
+</properties>

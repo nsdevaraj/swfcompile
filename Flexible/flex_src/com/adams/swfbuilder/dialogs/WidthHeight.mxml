@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	width="196" 
+	height="164" 
+	title="Base Width &amp; Height" 
+	horizontalAlign="left" 
+	close="closeWindow()"
+	creationComplete="init()"
+	showCloseButton="true">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			import com.adams.swfbuilder.events.WidthHeightEvent;
+			
+			private var txtWidth:Number;
+			private var txtHeight:Number;
+			private var txtPercentWidth:Number;
+			private var txtPercentHeight:Number;
+			
+			private function init():void
+			{
+				p_width.setFocus();
+			}
+			
+			private function closeWindow():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function handleOk():void
+			{				
+				if(p_width.text.indexOf("%") > -1)
+				{
+					txtPercentWidth = Number(p_width.text.split("%").join(""));
+				}else
+				{
+					txtWidth = Number(p_width.text);
+				}
+				
+				if(p_height.text.indexOf("%") > -1)
+				{
+					txtPercentHeight = Number(p_height.text.split("%").join(""));
+				}else
+				{
+					txtHeight = Number(p_width.text);
+				}
+				
+				var evt:WidthHeightEvent = new WidthHeightEvent(WidthHeightEvent.OK, false, false, Number(txtWidth), Number(txtHeight),Number(txtPercentWidth), Number(txtPercentHeight));
+				dispatchEvent(evt);
+				closeWindow();
+			}
+			
+			private function handleCancel():void
+			{
+				var evt:WidthHeightEvent = new WidthHeightEvent(WidthHeightEvent.CANCEL);
+				dispatchEvent(evt);
+				closeWindow();
+			}
+		]]>
+	</mx:Script>
+		<mx:TextInput x="8" y="20" id="p_width"/>
+		<mx:TextInput x="8" y="64" id="p_height"/>
+		<mx:Button x="57" y="94" label="ok" id="ok" click="handleOk()"/>
+		<mx:Button x="105" y="94" label="cancel" id="cancel" click="handleCancel()"/>
+		<mx:Label x="7" y="3" text="Width"/>
+		<mx:Label x="7" y="48" text="Height"/>
+</mx:TitleWindow>

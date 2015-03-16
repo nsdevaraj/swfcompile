@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+	<node label="File">
+		<node label="Open" />
+		<node label="Save" />
+		<node label="Exit" />
+	</node>
+	<node label="Edit">
+		<node label="Delete" />
+	</node> 
+</node>
